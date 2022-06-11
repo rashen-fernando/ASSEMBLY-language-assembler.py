@@ -1,0 +1,51 @@
+![ -e comp125asm ] || git clone https://cisgitlab.ufv.ca/cjanzen/comp125asm.git
+
+sourcecode = '''
+-- SEARCH NUMBER FROM A LIST
+START:     IN SEARCH
+           LOAD DATA
+           STORE TEMP
+           --JUMP LOOP
+
+LOOP:      LOAD TEMP
+           COMPARE SEARCH
+           JUMPEQ FOUND
+           INCREMENT OFFSET
+           LOAD DSTART
+           ADD OFFSET
+           COMPARE  LAST
+           JUMPLT   FOUND
+           LOAD R 
+           STORE TEMP
+           JUMP LOOP
+
+
+           
+
+FOUND:     OUT OFFSET
+           HALT 
+
+DSTART:    .DATA    DATA
+DATA:      .DATA    0
+           .DATA    1
+           .DATA    2
+           .DATA    3
+           .DATA    7
+           .DATA    10
+           .DATA    12
+           .DATA    38
+           .DATA    50
+LAST:      .DATA    ENDDATA
+TEMP:      .DATA    0
+OFFSET:    .DATA    0
+SEARCH:    .DATA    0
+ENDDATA:   .DATA    101
+'''
+
+from comp125asm import assembler, loader
+asm = assembler.Assembler(sourcecode)
+asm.assemble()
+print(asm.get_formatted_output())
+
+cpu = loader.CPU(asm.get_data())
+cpu.run()
