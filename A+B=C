@@ -1,0 +1,23 @@
+![ -e comp125asm ] || git clone https://cisgitlab.ufv.ca/cjanzen/comp125asm.git
+
+sourcecode = '''
+-- sum of two numbers
+    IN A -- comments 
+    IN B
+    LOAD A
+    ADD B
+    STORE C
+    OUT C
+    HALT
+A:  .DATA 1
+B:  .DATA 1
+C:  .DATA 0
+'''
+
+from comp125asm import assembler, loader
+asm = assembler.Assembler(sourcecode)
+asm.assemble()
+print(asm.get_formatted_output())
+
+cpu = loader.CPU(asm.get_data())
+cpu.run()
